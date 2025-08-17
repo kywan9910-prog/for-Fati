@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="fa">
+<head>
+  <meta charset="UTF-8">
+  <title>برا فاطی</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      background: linear-gradient(135deg, #ffb6c1, #b5055d);
+      font-family: "Tahoma", sans-serif;
+      text-align: center;
+      overflow: hidden;
+    }
+
+    h1 {
+      color: #fff;
+      margin: 20px;
+    }
+
+    #startBtn {
+      background-color: #e91e63;
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      font-size: 18px;
+      border-radius: 30px;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+    #startBtn:hover {
+      background-color: #d81b60;
+      transform: scale(1.1);
+    }
+
+    #game {
+      position: relative;
+      width: 100%;
+      height: 70vh;
+      background: rgba(255,255,255,0.2);
+      border-radius: 20px;
+      overflow: hidden;
+      margin: 0 auto;
+    }
+
+    .heart {
+      position: absolute;
+      font-size: 36px;
+      cursor: pointer;
+      animation: fall linear;
+      z-index: 2;
+      user-select: none;
+      pointer-events: auto;
+    }
+
+    #score, #timer {
+      font-size: 22px;
+      font-weight: bold;
+      color: #fff;
+      margin: 10px;
+    }
+
+    @keyframes fall {
+      from { top: -50px; }
+      to { top: 100%; }
+    }
+  </style>
+</head>
+<body>
+
+  <h1>💐 من گل میریزم رو سرت تو جمعشون کن💐</h1>
+  <button id="startBtn">شروع بازی</button>
+  <div id="score">گلایی که فاطی خانوم جمع کرده: 0</div>
+  <div id="timer">زمان: 15 ثانیه</div>
+  <div id="game"></div>
+
+
+  <audio id="bgMusic" autoplay loop>
+    <source src="UpMusics - The best wordless songs in the world (506).mp3" type="audio/mpeg">
+    مرورگر شما از پخش موزیک پشتیبانی نمی‌کند.
+  </audio>
+
+  <script>
+    const startBtn = document.getElementById("startBtn");
+    const game     = document.getElementById("game");
+    const scoreEl  = document.getElementById("score");
+    const timerEl  = document.getElementById("timer");
+    const bgMusic  = document.getElementById("bgMusic");
+
+    let score = 0;
+    let gameInterval;
+    let timerInterval;
+    let timeLeft = 15;
+
+
+    game.addEventListener("pointerdown", (e) => {
+      const heart = e.target.closest(".heart");
+      if (!heart) return;
+      score++;
+      scoreEl.textContent ="گلایی که فاطی خانوم جمع کرده: " + score;
+      heart.remove();
+    });
+
+    function createHeart() {
+      const heart = document.createElement("div");
+      heart.className = "heart";
+      heart.textContent = "💐";
+      heart.style.top = "-50px";
+      heart.style.left = Math.random() * (game.clientWidth - 40) + "px";
+
+      
+      const duration = Math.random() * 5 + 5;
+      heart.style.animationDuration = duration + "s";
+
+      heart.addEventListener("animationend", () => heart.remove());
+
+      game.appendChild(heart);
+    }
+
+    function startGame() {
+      score = 0;
+      timeLeft = 15;
+      scoreEl.textContent = "گلایی که فاطی خانوم جمع کرده: " + score;
+      timerEl.textContent = "زمان: " + timeLeft;
+      game.innerHTML = "";
+      clearInterval(gameInterval);
+      clearInterval(timerInterval);
+
+
+      bgMusic.currentTime = 0;
+      bgMusic.play();
+
+      
+      gameInterval = setInterval(createHeart, 900);
+
+    
+      timerInterval = setInterval(() => {
+        timeLeft--;
+        timerEl.textContent = "زمان: " + timeLeft;
+        if (timeLeft <= 0) {
+          endGame();
+        }
+      }, 1000);
+    }
+
+    function endGame() {
+      clearInterval(gameInterval);
+      clearInterval(timerInterval);
+      bgMusic.pause();
+      alert("بازی تموم شد! گل هایی که داری: " + score + 
+            " 💐\nحال می‌کنی کیوانو داریا 😈");
+    }
+
+    startBtn.addEventListener("click", startGame);
+  </script>
+
+
+
+<!-- Footer -->
+<footer class="footer">
+    <div class="footer-images">
+      <img src="f74972d376493c497ac621fc025040ecbcb35781_1595531101.jpg" alt="میو" class="footer-img">
+      <img src="6007.jpg" alt="میو" class="footer-img">
+    </div>
+    <p class="footer-text"> 💖💖💖  </p>
+  </footer>
+  
+  <style>
+
+  .footer {
+    background-color: #f68c9e; 
+    padding: 15px 0;
+    text-align: center;
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    box-shadow: 0 -2px 10px rgba(0,0,0,0.1);
+  }
+  
+
+  .footer-images {
+    display: flex;
+    justify-content: center;
+    gap: 15px; 
+    margin-bottom: 10px;
+  }
+  
+
+  .footer-img {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%; 
+    object-fit: cover;
+  }
+  
+
+  .footer-text {
+    font-family: 'Comic Sans MS', cursive, sans-serif;
+    color: #fff;
+    font-size: 16px;
+  }
+  </style>
+    
+
+</body>
+</html>
